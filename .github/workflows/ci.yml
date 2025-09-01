@@ -9,9 +9,6 @@ on:
 jobs:
   tests:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [ "3.11" ]
 
     steps:
       - name: Checkout
@@ -20,8 +17,8 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
-          cache: 'pip'
+          python-version: "3.11"
+          cache: pip
 
       - name: Install dependencies
         run: |
@@ -30,17 +27,18 @@ jobs:
             pip install -r requirements-dev.txt
           else
             pip install -r requirements.txt
-            pip install pytest pytest-django pytest-cov coverage
+            pip install pytest pytest-django coverage
           fi
 
       - name: Run tests with coverage
         env:
-          DJANGO_SETTINGS_MODULE: filelines.settings   # <-- adjust if your settings module is different
+          DJANGO_SETTINGS_MODULE: filelines.settings   # <- change if needed
         run: |
-          pytest -q \
-            --cov=files --cov-report=term-missing \
-            --cov-report=xml:coverage.xml \
-            --junitxml=reports/junit.xml
+          mkdir -p reports
+          coverage run -m pytest -q --junitxml=reports/junit.xml
+          coverage report -m
+          coverage xml -o coverage.xml
+          coverage html -d coverage_html
 
       - name: Upload coverage HTML (artifact)
         uses: actions/upload-artifact@v4
