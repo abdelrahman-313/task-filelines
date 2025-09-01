@@ -35,3 +35,6 @@ Follow these steps to get the project running locally:
 ```bash
 git clone https://github.com/abdelrahman-313/task-filelines.git
 cd task-filelines
+docker compose up --build
+
+
