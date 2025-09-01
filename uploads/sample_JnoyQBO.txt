@@ -1,4 +1,0 @@
-Hello World
-This is a test file
-Django with Docker
-Longest line goes hereeeeeeeee
