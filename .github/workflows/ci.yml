@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ "3.11" ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements-dev.txt ]; then
+            pip install -r requirements-dev.txt
+          else
+            pip install -r requirements.txt
+            pip install pytest pytest-django pytest-cov coverage
+          fi
+
+      - name: Run tests with coverage
+        env:
+          DJANGO_SETTINGS_MODULE: filelines.settings   # <-- adjust if your settings module is different
+        run: |
+          pytest -q \
+            --cov=files --cov-report=term-missing \
+            --cov-report=xml:coverage.xml \
+            --junitxml=reports/junit.xml
+
+      - name: Upload coverage HTML (artifact)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage_html
+          path: coverage_html
+
+      - name: Upload test report (artifact)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: junit
+          path: reports/junit.xml
