@@ -36,5 +36,11 @@ Follow these steps to get the project running locally:
 git clone https://github.com/abdelrahman-313/task-filelines.git
 cd task-filelines
 docker compose up --build
+```
+### 2. Access the application
+- **App Home** → [http://127.0.0.1:8000/](http://127.0.0.1:8000/)  
+- **Swagger UI** → [http://127.0.0.1:8000/api/schema/swagger-ui/](http://127.0.0.1:8000/api/schema/swagger-ui/)  
+- **ReDoc** → [http://127.0.0.1:8000/api/schema/redoc/](http://127.0.0.1:8000/api/schema/redoc/)  
+- **Django Admin** → [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)  
 
 
